@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Shopping</title>
+    <style>
+        body{
+            margin:0;
+            font-family: Arial, sans-serif;
+            color:white;
+            text-align:center;
+        }
+        .page{
+            display:none;
+            min-height:100vh;
+            padding:20px;
+            background-size:cover;
+            background-position:center;
+        }
+        .active{ display:block; }
+
+        /* Page Background Images */
+        #welcome{background-image:url('https://images.unsplash.com/photo-1607082349566-187342175e2f');}
+        #products{background-image:url('https://images.unsplash.com/photo-1607082350920-2b1e3b5f7f52');}
+        #cart{background-image:url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da');}
+        #login{background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');}
+        #success{background-image:url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');}
+
+        button{
+            padding:10px 20px;
+            margin:10px;
+            background:teal;
+            color:white;
+            border:none;
+            cursor:pointer;
+        }
+        input{
+            padding:8px;
+            margin:5px;
+        }
+
+        .product{
+            background:rgba(0,0,0,0.7);
+            border-radius:10px;
+            padding:10px;
+            margin:15px;
+            width:220px;
+            display:inline-block;
+        }
+        .product img{
+            width:100%;
+            height:150px;
+            border-radius:10px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Welcome Page -->
+<div id="welcome" class="page active">
+    <h1>🛒 Welcome to Shopping Website</h1>
+    <button onclick="showPage('products')">Enter Shop</button>
+</div>
+
+<!-- Products Page -->
+<div id="products" class="page">
+    <h2>Products List</h2>
+    <input type="text" id="search" placeholder="Search product" onkeyup="searchProduct()">
+    <div id="productList"></div>
+    <button onclick="showPage('cart')">Go to Cart</button>
+</div>
+
+<!-- Cart Page -->
+<div id="cart" class="page">
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <button onclick="showPage('login')">Proceed to Login</button>
+</div>
+
+<!-- Login Page -->
+<div id="login" class="page">
+    <h2>Login Details</h2>
+    <input type="text" id="name" placeholder="Name"><br>
+    <input type="text" id="mobile" placeholder="Mobile Number"><br>
+    <input type="email" id="email" placeholder="Email"><br>
+    <button onclick="buyItems()">Buy Items</button>
+</div>
+
+<!-- Success Page -->
+<div id="success" class="page">
+    <h2>✅ Purchase Successful!</h2>
+    <p>Thank you for shopping with us.</p>
+</div>
+
+<script>
+const products = [
+ {name:"Laptop", price:50000, img:"https://images.unsplash.com/photo-1517336714731-489689fd1ca8"},
+ {name:"Mobile", price:20000, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"},
+ {name:"Headphones", price:2000, img:"https://images.unsplash.com/photo-1518441902113-c1d0d4f5c6f3"},
+ {name:"Watch", price:3000, img:"https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b"},
+ {name:"Shoes", price:2500, img:"https://images.unsplash.com/photo-1528701800489-20be9c8f0e35"}
+];
+
+let cart = [];
+
+function showPage(pageId){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    if(pageId==='products') displayProducts(products);
+    if(pageId==='cart') displayCart();
+}
+
+function displayProducts(list){
+    const productList=document.getElementById('productList');
+    productList.innerHTML="";
+    list.forEach((p,index)=>{
+        productList.innerHTML+=`
+        <div class="product">
+            <img src="${p.img}">
+            <h3>${p.name}</h3>
+            <p>Price: ₹${p.price}</p>
+            <button onclick="addToCart(${index})">Add to Cart</button>
+        </div>`;
+    });
+}
+
+function addToCart(index){
+    cart.push(products[index]);
+    alert("Added to cart!");
+}
+
+function displayCart(){
+    const cartItems=document.getElementById('cartItems');
+    cartItems.innerHTML="";
+    cart.forEach(item=>{
+        cartItems.innerHTML+=<p>${item.name} - ₹${item.price}</p>;
+    });
+}
+
+function searchProduct(){
+    const search=document.getElementById('search').value.toLowerCase();
+    const filtered=products.filter(p=>p.name.toLowerCase().includes(search));
+    displayProducts(filtered);
+}
+
+function buyItems(){
+    const name=document.getElementById('name').value;
+    const mobile=document.getElementById('mobile').value;
+    const email=document.getElementById('email').value;
+
+    if(name && mobile && email){
+        showPage('success');
+    } else {
+        alert("Please fill all details");
+    }
+}
+</script>
+
+</body>
+</html>
